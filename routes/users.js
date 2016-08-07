@@ -39,4 +39,17 @@ router.put('/:id', function (req, res) {
     })
 })
 
+router.post('/', function (req, res) {
+  var name = req.body.name
+  var email = req.body.email
+  db.createUser(name, email)
+    .then(function (data) {
+      console.log(data)
+      res.status(201).json(data)
+    })
+    .catch(function (err) {
+      res.status(500).send({"error": err})
+    })
+})
+
 module.exports = router

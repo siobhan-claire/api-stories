@@ -4,7 +4,8 @@ var knex = require('knex')(development)
 module.exports = {
   getUsers: getUsers,
   deleteUser: deleteUser,
-  updateUser: updateUser
+  updateUser: updateUser,
+  createUser: createUser
 }
 
 function getUsers () {
@@ -30,4 +31,17 @@ function updateUser(id, name, email) {
         .select('*')
         .where('id', id)
     })
+}
+
+function createUser(name, email) {
+  return knex('users')
+  .insert({
+    name: name,
+    email: email
+  })
+  .then(function () {
+    return knex('users')
+    .select('*')
+    .where('email', email)
+  })
 }
