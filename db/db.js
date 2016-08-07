@@ -5,7 +5,8 @@ module.exports = {
   getUsers: getUsers,
   deleteUser: deleteUser,
   updateUser: updateUser,
-  createUser: createUser
+  createUser: createUser,
+  getUsersByKeyword: getUsersByKeyword
 }
 
 function getUsers () {
@@ -44,4 +45,10 @@ function createUser(name, email) {
     .select('*')
     .where('email', email)
   })
+}
+
+function getUsersByKeyword (keyword) {
+  return knex('users')
+    .select()
+    .where('name', 'like', '%' + keyword + '%')
 }

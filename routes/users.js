@@ -5,13 +5,24 @@ var db = require('../db/db')
 router.use(bodyParser.json())
 
 router.get('/', function (req, res) {
-  db.getUsers()
-    .then(function (data) {
-      res.json(data)
-    })
-    .catch(function (err) {
-      res.status(500).send({"error": err})
-    })
+  if (req.query.search) {
+    var keyword = req.query.search
+    db.getUsersByKeyword (keyword)
+      .then(function (data) {
+        res.json(data)
+      })
+      .catch(function (err) {
+        res.status(500).send({"error": err})
+      })
+  } else {
+    db.getUsers()
+      .then(function (data) {
+        res.json(data)
+      })
+      .catch(function (err) {
+        res.status(500).send({"error": err})
+      })
+  }
 })
 
 router.delete('/:id', function (req, res) {
