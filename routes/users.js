@@ -2,27 +2,25 @@ var express = require('express')
 var router = express.Router()
 var bodyParser = require('body-parser')
 var db = require('../db/db')
+var request = require('superagent')
+
 router.use(bodyParser.json())
 
 router.get('/', function (req, res) {
+  var keyword = req.query.search
+  var dbquery = []
   if (req.query.search) {
-    var keyword = req.query.search
-    db.getUsersByKeyword (keyword)
-      .then(function (data) {
-        res.json(data)
-      })
-      .catch(function (err) {
-        res.status(500).send({"error": err})
-      })
+    dbquery = db.getUsersByKeyword (keyword)
   } else {
-    db.getUsers()
-      .then(function (data) {
-        res.json(data)
-      })
-      .catch(function (err) {
-        res.status(500).send({"error": err})
-      })
+    dbquery = db.getUsers()
   }
+  dbquery
+  .then(function (data) {
+    res.json(data)
+  })
+  .catch(function (err) {
+    res.status(500).send({"error": err})
+  })
 })
 
 router.delete('/:id', function (req, res) {
@@ -53,6 +51,7 @@ router.put('/:id', function (req, res) {
 router.post('/', function (req, res) {
   var name = req.body.name
   var email = req.body.email
+  console.log(name, email)
   db.createUser(name, email)
     .then(function (data) {
       console.log(data)
@@ -60,6 +59,22 @@ router.post('/', function (req, res) {
     })
     .catch(function (err) {
       res.status(500).send({"error": err})
+    })
+})
+
+router.get('/surprise', function (req, res) {
+  Promise.all([db.getUsers(),
+  request
+    .get('http://192.168.20.28:3000/users/99923')])
+    .then(function (values) {
+      var response = {
+        data: values[0],
+        surprise: values[1].text
+      }
+      res.send(response)
+    })
+    .catch(function (err) {
+      res.send("ERROOOOOOORRRR")
     })
 })
 

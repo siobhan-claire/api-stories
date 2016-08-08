@@ -2,12 +2,33 @@
 <html>
   <head>
     <title>EDA Phase 1 Express Boilerplate</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.js"></script>
+    <script type="text/javascript" src="main.js"></script>
   </head>
   <body>
-    <ul>
-    {{#each users}}
-      <li>{{name}} ({{email}})</li>
-    {{/each}}
-    </ul>
+    <h1>List users</h1>
+    <form action="/users" method="get">
+      <label for="search">Type in your keyword (optional)</label>
+      <input type="text" name="search" value="">
+      <button type="submit" name="list-button">Submit</button>
+    </form>
+    <h1>Delete a user</h1>
+    <form>
+      <label for="id">Type the user ID</label>
+      <input id="delete-id" type="text" name="id" value="">
+      <button id="delete-button" type="submit" name="delete-button">Submit</button>
+      <p id="delete-result"></p>
+    </form>
+    <h1>Create User</h1>
+    <form>
+      <label for="id">id</label>
+      <input id="newuser-id" type="text" name="id">
+      <label for="name">Type your name</label>
+      <input id="newuser-name" type="text" name="name">
+      <label for="email">Type you email</label>
+      <input id="newuser-email" type="text" name="email">
+      <button id="create-button" type="button">Submit</button>
+      <p id="create-result"></p>
+    </form>
   </body>
 </html>
